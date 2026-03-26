@@ -21,22 +21,20 @@ const seedData = async () => {
     await Product.deleteMany({});
     await Coupon.deleteMany({});
 
-    // Create admin user
-    const adminPassword = await bcrypt.hash('admin123', 12);
+    // Create admin user (password will be hashed by User model pre-save hook)
     await User.create({
       name: 'Admin User',
       email: 'admin@nutybliss.pk',
-      password: adminPassword,
+      password: 'admin123',
       role: 'admin',
       isActive: true
     });
 
     // Create test user
-    const userPassword = await bcrypt.hash('user123', 12);
     await User.create({
       name: 'Test User',
       email: 'user@test.com',
-      password: userPassword,
+      password: 'user123',
       role: 'user',
       isActive: true
     });

@@ -8,7 +8,8 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
-  getAllProductsAdmin
+  getAllProductsAdmin,
+  getProductAdmin
 } = require('../controllers/productController');
 const { protect, adminOnly } = require('../middleware/auth');
 
@@ -20,6 +21,7 @@ router.get('/:id/related', getRelatedProducts);
 
 // Admin routes
 router.get('/admin/all', protect, adminOnly, getAllProductsAdmin);
+router.get('/admin/:id', protect, adminOnly, getProductAdmin);
 router.post('/', protect, adminOnly, createProduct);
 router.put('/:id', protect, adminOnly, updateProduct);
 router.delete('/:id', protect, adminOnly, deleteProduct);

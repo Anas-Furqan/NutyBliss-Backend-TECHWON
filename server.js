@@ -8,11 +8,32 @@ connectDB();
 
 const app = express();
 
+const parseOrigins = (value) => {
+  if (!value) return [];
+  return value
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+};
+
 // Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
-}));
+const allowedOrigins = [
+  ...parseOrigins(process.env.FRONTEND_URLS),
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+  'http://localhost:3000',
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow non-browser clients (curl/postman) with no origin
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

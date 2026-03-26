@@ -1,5 +1,31 @@
 const Product = require('../models/Product');
 
+// Get single product (admin - includes inactive)
+exports.getProductAdmin = async (req, res) => {
+  try {
+    const product = await Product.findOne({
+      $or: [{ _id: req.params.id }, { slug: req.params.id }],
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Get all products
 exports.getProducts = async (req, res) => {
   try {
