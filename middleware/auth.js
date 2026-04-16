@@ -10,13 +10,10 @@ exports.protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
     }
 
-<<<<<<< HEAD
     if (!token && req.cookies?.token) {
       token = req.cookies.token;
     }
 
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -50,7 +47,6 @@ exports.optionalAuth = async (req, res, next) => {
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
-<<<<<<< HEAD
     }
 
     if (!token && req.cookies?.token) {
@@ -58,8 +54,6 @@ exports.optionalAuth = async (req, res, next) => {
     }
 
     if (token) {
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.id);
     }

@@ -3,11 +3,7 @@ const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const Coupon = require('../models/Coupon');
 
-<<<<<<< HEAD
 const ALLOWED_ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'in-progress', 'shipped', 'on-the-way', 'delivered', 'cancelled'];
-
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 // Create order
 exports.createOrder = async (req, res) => {
   try {
@@ -198,7 +194,6 @@ exports.trackOrder = async (req, res) => {
   try {
     const { orderNumber, email } = req.query;
 
-<<<<<<< HEAD
     if (!orderNumber) {
       return res.status(400).json({
         success: false,
@@ -209,9 +204,6 @@ exports.trackOrder = async (req, res) => {
     const order = await Order.findOne({
       $or: [{ orderNumber }, { _id: orderNumber.match(/^[0-9a-fA-F]{24}$/) ? orderNumber : undefined }].filter(Boolean),
     })
-=======
-    const order = await Order.findOne({ orderNumber })
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
       .select('orderNumber status statusHistory shippingAddress.email trackingNumber trackingUrl createdAt');
 
     if (!order) {
@@ -289,7 +281,6 @@ exports.updateOrderStatus = async (req, res) => {
   try {
     const { status, trackingNumber, trackingUrl, note } = req.body;
 
-<<<<<<< HEAD
     if (!ALLOWED_ORDER_STATUSES.includes(status)) {
       return res.status(400).json({
         success: false,
@@ -297,8 +288,6 @@ exports.updateOrderStatus = async (req, res) => {
       });
     }
 
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
     const order = await Order.findById(req.params.id);
 
     if (!order) {

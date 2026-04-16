@@ -6,10 +6,7 @@ require('dotenv').config();
 const User = require('./models/User');
 const Product = require('./models/Product');
 const Coupon = require('./models/Coupon');
-<<<<<<< HEAD
 const Category = require('./models/Category');
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
 const connectDB = async () => {
   await mongoose.connect(process.env.MONGODB_URI);
@@ -24,7 +21,6 @@ const seedData = async () => {
     await User.deleteMany({});
     await Product.deleteMany({});
     await Coupon.deleteMany({});
-<<<<<<< HEAD
     await Category.deleteMany({});
 
     const categories = await Category.insertMany([
@@ -38,8 +34,6 @@ const seedData = async () => {
       acc[category.slug] = category._id;
       return acc;
     }, {});
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
     // Create admin user (password will be hashed by User model pre-save hook)
     await User.create({
@@ -70,10 +64,7 @@ const seedData = async () => {
         shortDescription: '100% natural creamy peanut butter with no added sugar',
         images: [{ url: '/images/products/creamy-pb-1.jpg', alt: 'Classic Creamy Peanut Butter' }],
         category: 'peanut-butter',
-<<<<<<< HEAD
         categoryRef: categoryMap['peanut-butter'],
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
         variants: [
           { size: '500g', price: 1200, discountPrice: 999, stock: 50, sku: 'PB-CRM-500' },
           { size: '750g', price: 1700, discountPrice: 1499, stock: 30, sku: 'PB-CRM-750' },
@@ -97,10 +88,7 @@ const seedData = async () => {
         shortDescription: 'Crunchy texture with real peanut pieces',
         images: [{ url: '/images/products/crunchy-pb-1.jpg', alt: 'Crunchy Peanut Butter' }],
         category: 'peanut-butter',
-<<<<<<< HEAD
         categoryRef: categoryMap['peanut-butter'],
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
         variants: [
           { size: '500g', price: 1200, discountPrice: 999, stock: 40, sku: 'PB-CRN-500' },
           { size: '750g', price: 1700, discountPrice: 1499, stock: 25, sku: 'PB-CRN-750' },
@@ -124,10 +112,7 @@ const seedData = async () => {
         shortDescription: 'Rich chocolate flavor meets creamy peanut butter',
         images: [{ url: '/images/products/choco-pb-1.jpg', alt: 'Chocolate Peanut Butter' }],
         category: 'peanut-butter',
-<<<<<<< HEAD
         categoryRef: categoryMap['peanut-butter'],
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
         variants: [
           { size: '500g', price: 1400, discountPrice: 1199, stock: 35, sku: 'PB-CHO-500' },
           { size: '750g', price: 1900, discountPrice: 1699, stock: 20, sku: 'PB-CHO-750' }
@@ -150,10 +135,7 @@ const seedData = async () => {
         shortDescription: 'Naturally sweetened with organic honey',
         images: [{ url: '/images/products/honey-pb-1.jpg', alt: 'Honey Peanut Butter' }],
         category: 'peanut-butter',
-<<<<<<< HEAD
         categoryRef: categoryMap['peanut-butter'],
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
         variants: [
           { size: '500g', price: 1350, discountPrice: 1149, stock: 30, sku: 'PB-HON-500' },
           { size: '750g', price: 1850, discountPrice: 1599, stock: 18, sku: 'PB-HON-750' }
@@ -175,10 +157,7 @@ const seedData = async () => {
         shortDescription: 'High-fiber whole grain oats',
         images: [{ url: '/images/products/oats-1.jpg', alt: 'Premium Rolled Oats' }],
         category: 'oats',
-<<<<<<< HEAD
         categoryRef: categoryMap['oats'],
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
         variants: [
           { size: '500g', price: 450, discountPrice: 399, stock: 60, sku: 'OAT-ROL-500' },
           { size: '1kg', price: 800, discountPrice: 699, stock: 40, sku: 'OAT-ROL-1000' }
@@ -200,10 +179,7 @@ const seedData = async () => {
         shortDescription: 'Peanut butter + Oats combo at special price',
         images: [{ url: '/images/products/bundle-1.jpg', alt: 'Healthy Starter Bundle' }],
         category: 'bundles',
-<<<<<<< HEAD
         categoryRef: categoryMap['bundles'],
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
         variants: [
           { size: 'Standard', price: 1650, discountPrice: 1299, stock: 25, sku: 'BND-STR-001' }
         ],

@@ -75,11 +75,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-<<<<<<< HEAD
     enum: ['pending', 'confirmed', 'processing', 'in-progress', 'shipped', 'on-the-way', 'delivered', 'cancelled'],
-=======
-    enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
     default: 'pending'
   },
   trackingNumber: String,
@@ -98,11 +94,7 @@ const orderSchema = new mongoose.Schema({
 orderSchema.pre('save', async function(next) {
   if (!this.orderNumber) {
     const count = await mongoose.model('Order').countDocuments();
-<<<<<<< HEAD
     this.orderNumber = `NUTY-${(count + 1).toString().padStart(4, '0')}`;
-=======
-    this.orderNumber = `NB${Date.now().toString().slice(-6)}${(count + 1).toString().padStart(4, '0')}`;
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
   }
   next();
 });

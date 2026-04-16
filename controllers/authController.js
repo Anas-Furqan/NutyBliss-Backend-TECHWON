@@ -1,5 +1,4 @@
 const User = require('../models/User');
-<<<<<<< HEAD
 const Cart = require('../models/Cart');
 const { generateToken } = require('../middleware/auth');
 
@@ -31,11 +30,6 @@ const sendAuthResponse = (res, statusCode, user, message) => {
 
   return res.status(statusCode).json(payload);
 };
-
-=======
-const { generateToken } = require('../middleware/auth');
-
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 // Register user
 exports.register = async (req, res) => {
   try {
@@ -56,24 +50,9 @@ exports.register = async (req, res) => {
       phone
     });
 
-<<<<<<< HEAD
     await Cart.create({ user: user._id, items: [] });
 
     return sendAuthResponse(res, 201, user, 'Registration successful');
-=======
-    const token = generateToken(user._id);
-
-    res.status(201).json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
-    });
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -110,22 +89,7 @@ exports.login = async (req, res) => {
       });
     }
 
-<<<<<<< HEAD
     return sendAuthResponse(res, 200, user, 'Login successful');
-=======
-    const token = generateToken(user._id);
-
-    res.json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
-    });
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -190,17 +154,7 @@ exports.updatePassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-<<<<<<< HEAD
     return sendAuthResponse(res, 200, user, 'Password updated successfully');
-=======
-    const token = generateToken(user._id);
-
-    res.json({
-      success: true,
-      token,
-      message: 'Password updated successfully'
-    });
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -283,7 +237,6 @@ exports.deleteAddress = async (req, res) => {
     });
   }
 };
-<<<<<<< HEAD
 
 // Logout user and clear auth cookie
 exports.logout = async (req, res) => {
@@ -299,5 +252,3 @@ exports.logout = async (req, res) => {
     message: 'Logged out successfully',
   });
 };
-=======
->>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
