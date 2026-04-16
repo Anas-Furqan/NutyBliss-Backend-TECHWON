@@ -6,7 +6,10 @@ const {
   getMe,
   updateProfile,
   updatePassword,
+<<<<<<< HEAD
   logout,
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
   addAddress,
   updateAddress,
   deleteAddress
@@ -15,7 +18,10 @@ const { protect } = require('../middleware/auth');
 
 router.post('/register', register);
 router.post('/login', login);
+<<<<<<< HEAD
 router.post('/logout', logout);
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 router.get('/me', protect, getMe);
 router.put('/profile', protect, updateProfile);
 router.put('/password', protect, updatePassword);

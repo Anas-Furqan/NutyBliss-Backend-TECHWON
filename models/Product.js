@@ -46,11 +46,16 @@ const productSchema = new mongoose.Schema({
   }],
   category: {
     type: String,
+<<<<<<< HEAD
     required: true
   },
   categoryRef: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category'
+=======
+    required: true,
+    enum: ['peanut-butter', 'oats', 'bundles', 'accessories']
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
   },
   variants: [variantSchema],
   basePrice: {

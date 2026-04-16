@@ -1,5 +1,8 @@
 const Product = require('../models/Product');
+<<<<<<< HEAD
 const Category = require('../models/Category');
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
 // Get single product (admin - includes inactive)
 exports.getProductAdmin = async (req, res) => {
@@ -48,6 +51,7 @@ exports.getProducts = async (req, res) => {
 
     // Category filter
     if (category) {
+<<<<<<< HEAD
       const categoryDoc = await Category.findOne({
         $or: [{ _id: category.match(/^[0-9a-fA-F]{24}$/) ? category : null }, { slug: category }, { name: category }],
         isActive: true,
@@ -58,6 +62,9 @@ exports.getProducts = async (req, res) => {
       } else {
         query.category = category;
       }
+=======
+      query.category = category;
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
     }
 
     // Search
@@ -102,7 +109,10 @@ exports.getProducts = async (req, res) => {
     const skip = (Number(page) - 1) * Number(limit);
 
     const products = await Product.find(query)
+<<<<<<< HEAD
       .populate('categoryRef', 'name slug')
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
       .sort(sortOption)
       .skip(skip)
       .limit(Number(limit));
@@ -136,7 +146,11 @@ exports.getProduct = async (req, res) => {
         { slug: req.params.id }
       ],
       isActive: true
+<<<<<<< HEAD
     }).populate('categoryRef', 'name slug');
+=======
+    });
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
     if (!product) {
       return res.status(404).json({
@@ -171,11 +185,17 @@ exports.getRelatedProducts = async (req, res) => {
 
     const relatedProducts = await Product.find({
       _id: { $ne: product._id },
+<<<<<<< HEAD
       ...(product.categoryRef ? { categoryRef: product.categoryRef } : { category: product.category }),
       isActive: true
     })
       .populate('categoryRef', 'name slug')
       .limit(4);
+=======
+      category: product.category,
+      isActive: true
+    }).limit(4);
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
     res.json({
       success: true,
@@ -192,12 +212,21 @@ exports.getRelatedProducts = async (req, res) => {
 // Get categories
 exports.getCategories = async (req, res) => {
   try {
+<<<<<<< HEAD
     const categories = await Category.find({ isActive: true }).sort({ name: 1 });
 
     const categoryData = await Promise.all(
       categories.map(async (cat) => {
         const count = await Product.countDocuments({ categoryRef: cat._id, isActive: true });
         return { id: cat._id, name: cat.name, slug: cat.slug, count };
+=======
+    const categories = await Product.distinct('category', { isActive: true });
+
+    const categoryData = await Promise.all(
+      categories.map(async (cat) => {
+        const count = await Product.countDocuments({ category: cat, isActive: true });
+        return { name: cat, count };
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
       })
     );
 
@@ -216,6 +245,7 @@ exports.getCategories = async (req, res) => {
 // ADMIN: Create product
 exports.createProduct = async (req, res) => {
   try {
+<<<<<<< HEAD
     const payload = { ...req.body };
     if (payload.categoryId) {
       const category = await Category.findOne({ _id: payload.categoryId, isActive: true });
@@ -231,6 +261,9 @@ exports.createProduct = async (req, res) => {
     }
 
     const product = await Product.create(payload);
+=======
+    const product = await Product.create(req.body);
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
     res.status(201).json({
       success: true,
@@ -247,6 +280,7 @@ exports.createProduct = async (req, res) => {
 // ADMIN: Update product
 exports.updateProduct = async (req, res) => {
   try {
+<<<<<<< HEAD
     const payload = { ...req.body };
     if (payload.categoryId) {
       const category = await Category.findOne({ _id: payload.categoryId, isActive: true });
@@ -264,6 +298,11 @@ exports.updateProduct = async (req, res) => {
     const product = await Product.findByIdAndUpdate(
       req.params.id,
       payload,
+=======
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
       { new: true, runValidators: true }
     );
 
@@ -327,7 +366,10 @@ exports.getAllProductsAdmin = async (req, res) => {
     const skip = (Number(page) - 1) * Number(limit);
 
     const products = await Product.find(query)
+<<<<<<< HEAD
       .populate('categoryRef', 'name slug')
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(Number(limit));

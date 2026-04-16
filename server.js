@@ -1,7 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+<<<<<<< HEAD
 const cookieParser = require('cookie-parser');
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 const connectDB = require('./config/db');
 
 // Connect to database
@@ -22,8 +25,11 @@ const allowedOrigins = [
   ...parseOrigins(process.env.FRONTEND_URLS),
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
   'http://localhost:3000',
+<<<<<<< HEAD
   'http://localhost:3001',
   'http://localhost:3002',
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 ];
 
 app.use(
@@ -39,7 +45,10 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+<<<<<<< HEAD
 app.use(cookieParser());
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 
 // Static files for uploads
 app.use('/uploads', express.static('uploads'));
@@ -47,7 +56,10 @@ app.use('/uploads', express.static('uploads'));
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
+<<<<<<< HEAD
 app.use('/api/categories', require('./routes/categories'));
+=======
+>>>>>>> 31ff1966709dec4a1950373b2618f45c0bda59d2
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/users', require('./routes/users'));
