@@ -22,8 +22,7 @@ const allowedOrigins = [
   ...parseOrigins(process.env.FRONTEND_URLS),
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
   'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:3002',
+  'https://nuty-bliss-frontend-techwon.vercel.app/'
 ];
 
 app.use(
