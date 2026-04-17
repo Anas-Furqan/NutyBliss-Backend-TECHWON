@@ -25,6 +25,10 @@ const allowedOrigins = [
   'https://nuty-bliss-frontend-techwon.vercel.app/'
 ];
 
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -38,9 +42,6 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 // Static files for uploads
 app.use('/uploads', express.static('uploads'));
