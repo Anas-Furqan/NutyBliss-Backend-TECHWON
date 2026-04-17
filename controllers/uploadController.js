@@ -8,12 +8,48 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_BUCKET = process.env.SUPABASE_BUCKET || 'products';
 
-const getSupabase = () => {
-  const keyToUse = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
-  if (!SUPABASE_URL || !keyToUse) {
-    throw new Error('Supabase env missing: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_ANON_KEY)');
+const isPublishableKey = (key) => typeof key === 'string' && key.startsWith('sb_publishable_');
+
+const getConfigError = () => {
+  if (!SUPABASE_URL) {
+    return 'Supabase env missing: set SUPABASE_URL in backend .env';
   }
-  return createClient(SUPABASE_URL, keyToUse, {
+
+  if (!SUPABASE_SERVICE_ROLE_KEY) {
+    return 'Supabase env missing: set SUPABASE_SERVICE_ROLE_KEY in backend .env for admin uploads';
+  }
+
+  if (isPublishableKey(SUPABASE_SERVICE_ROLE_KEY)) {
+    return 'Invalid SUPABASE_SERVICE_ROLE_KEY: found a publishable key. Use the secret service-role key from Supabase Project Settings > API.';
+  }
+
+  return null;
+};
+
+const formatSupabaseError = (error) => {
+  if (!error) return 'Supabase upload failed';
+
+  const parts = [error.message, error.code, error.error, error.statusCode]
+    .filter(Boolean)
+    .map((value) => String(value));
+
+  const text = parts.join(' | ') || 'Supabase upload failed';
+  return text;
+};
+
+const isRlsError = (error) => {
+  const msg = (error?.message || '').toLowerCase();
+  const code = String(error?.code || '').toLowerCase();
+  return msg.includes('row-level security') || code === '42501';
+};
+
+const getSupabase = () => {
+  const configError = getConfigError();
+  if (configError) {
+    throw new Error(configError);
+  }
+
+  return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     auth: { persistSession: false },
   });
 };
@@ -82,14 +118,10 @@ const uploadToBucket = async (supabase, objectPath, file) => {
 
   const ensure = await ensureBucketExists(supabase);
   if (!ensure.ok) {
-    const serviceRoleMissing = !SUPABASE_SERVICE_ROLE_KEY;
-    const extra = serviceRoleMissing
-      ? ' Also set SUPABASE_SERVICE_ROLE_KEY in backend .env to allow bucket creation.'
-      : '';
     return {
       data: null,
       error: {
-        message: `Supabase bucket "${SUPABASE_BUCKET}" is missing and could not be created automatically.${extra}`,
+        message: `Supabase bucket "${SUPABASE_BUCKET}" is missing and could not be created automatically. ${formatSupabaseError(ensure.error)}`,
       },
     };
   }
@@ -120,9 +152,11 @@ exports.uploadImage = async (req, res) => {
     const { error } = await uploadToBucket(supabase, objectPath, req.file);
 
     if (error) {
-      return res.status(500).json({
+      const message = formatSupabaseError(error);
+      const statusCode = isRlsError(error) ? 403 : 500;
+      return res.status(statusCode).json({
         success: false,
-        message: error.message || 'Failed to upload image'
+        message
       });
     }
 
@@ -159,9 +193,11 @@ exports.uploadImages = async (req, res) => {
       const { error } = await uploadToBucket(supabase, objectPath, file);
 
       if (error) {
-        return res.status(500).json({
+        const message = formatSupabaseError(error);
+        const statusCode = isRlsError(error) ? 403 : 500;
+        return res.status(statusCode).json({
           success: false,
-          message: error.message || 'Failed to upload one of the images'
+          message
         });
       }
 

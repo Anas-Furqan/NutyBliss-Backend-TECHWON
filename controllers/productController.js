@@ -1,11 +1,26 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const mongoose = require('mongoose');
+
+const normalizeParam = (value) => decodeURIComponent(String(value || '')).trim();
+
+const buildProductLookup = (idOrSlug) => {
+  const normalized = normalizeParam(idOrSlug);
+  const slug = normalized.toLowerCase();
+  const clauses = [{ slug }];
+
+  if (mongoose.Types.ObjectId.isValid(normalized)) {
+    clauses.push({ _id: normalized });
+  }
+
+  return clauses;
+};
 
 // Get single product (admin - includes inactive)
 exports.getProductAdmin = async (req, res) => {
   try {
     const product = await Product.findOne({
-      $or: [{ _id: req.params.id }, { slug: req.params.id }],
+      $or: buildProductLookup(req.params.id),
     });
 
     if (!product) {
@@ -130,11 +145,9 @@ exports.getProducts = async (req, res) => {
 // Get single product
 exports.getProduct = async (req, res) => {
   try {
+    const lookup = buildProductLookup(req.params.id);
     const product = await Product.findOne({
-      $or: [
-        { _id: req.params.id },
-        { slug: req.params.id }
-      ],
+      $or: lookup,
       isActive: true
     }).populate('categoryRef', 'name slug');
 
@@ -160,7 +173,9 @@ exports.getProduct = async (req, res) => {
 // Get related products
 exports.getRelatedProducts = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({
+      $or: buildProductLookup(req.params.id),
+    });
 
     if (!product) {
       return res.status(404).json({
